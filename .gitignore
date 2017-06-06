@@ -11,7 +11,6 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.ear
 *.zip
@@ -25,7 +24,3 @@ hs_err_pid*
 out/
 build/
 seeknow.iws
-!lib/jxgrabkey-1.0.jar
-!lib/sikulixapi-1.1.0.jar
-!lib/jxgrabkey-1.0.jar
-!lib/sikulixapi-1.1.0.jar
