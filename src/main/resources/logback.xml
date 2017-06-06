@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+	<conversionRule conversionWord="color" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+
+	<statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
+
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d|%1p|%t|%m%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- logback log appenders -->
+	<logger name="ch.qos.logback" additivity="false" level="WARN">
+		<appender-ref ref="console"/>
+	</logger>
+	<logger name="ch.qos.logback.classic.LoggerContext" additivity="false" level="WARN">
+		<appender-ref ref="console"/>
+	</logger>
+	<logger name="ch.qos.logback.core" additivity="false" level="WARN">
+		<appender-ref ref="console"/>
+	</logger>
+
+	<!-- generic log appenders for open-source libraries -->
+	<logger name="org" level="WARN">
+		<appender-ref ref="console"/>
+	</logger>
+
+	<!-- generic commericial library log appenders -->
+	<logger name="com" level="WARN">
+		<appender-ref ref="console"/>
+	</logger>
+
+	<logger name="org.uptospeed.seeknow" additivity="false" level="INFO">
+		<appender-ref ref="console"/>
+	</logger>
+
+	<!-- catch-all -->
+	<root level="INFO">
+		<appender-ref ref="console"/>
+	</root>
+
+</configuration>

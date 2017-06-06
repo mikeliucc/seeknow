@@ -1,0 +1,74 @@
+group 'uptospeed''
+version '0.9'
+
+apply plugin: 'java'
+apply plugin: 'distribution'
+apply plugin: 'idea'
+apply plugin: 'maven'
+
+targetCompatibility = 1.8
+sourceCompatibility = 1.8
+archivesBaseName = 'seeknow'
+
+repositories {
+	//	mavenLocal()
+	mavenCentral()
+	maven { url "https://oss.sonatype.org/content/groups/public/" }
+	maven { url "http://labs.consol.de/maven/repository/" }
+
+}
+
+dependencies {
+	// support: apache commons
+	compile("commons-io:commons-io:+")
+	compile("org.apache.commons:commons-lang3:+")
+	compile("org.apache.commons:commons-collections4:+")
+
+	// support: sikuli
+	//	compile('com.sikulix:sikulixlibswin:+')
+	//	compile('com.sikulix:sikulixlibsmac:+')
+
+	// support: gson
+	compile("com.google.code.gson:gson:+")
+
+	// support: logback
+	compile("ch.qos.logback:logback-classic:+")
+	compile("ch.qos.logback:logback-core:+")
+
+	compile fileTree(dir: 'lib', include: '*.jar')
+
+	testCompile("junit:junit:4.12")
+}
+
+
+//Test {
+//	exclude '**/*Manual*'
+//}
+
+//artifacts {
+//	archives jar
+//	archives sourcesJar
+//	    archives singleDependentJar
+//}
+
+//task distro {
+//	group "Build"
+//	description "build project clean room and update lib/ directory"
+//	mustRunAfter clean
+//	dependsOn build
+//}
+
+//distributions {
+//	main {
+//		contents {
+//			into('lib') {
+//				from Jar
+//				from 'lib'
+//				from(project.configurations.runtime)
+//			}
+//			into('bin') {
+//				from 'bin'
+//			}
+//		}
+//	}
+//}
