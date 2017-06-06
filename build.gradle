@@ -1,4 +1,4 @@
-group 'uptospeed''
+group 'uptospeed'
 version '0.9'
 
 apply plugin: 'java'
