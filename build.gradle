@@ -5,6 +5,7 @@ apply plugin: 'java'
 apply plugin: 'distribution'
 apply plugin: 'idea'
 apply plugin: 'maven'
+apply plugin: 'eclipse'
 
 targetCompatibility = 1.8
 sourceCompatibility = 1.8
@@ -41,34 +42,46 @@ dependencies {
 }
 
 
-//Test {
-//	exclude '**/*Manual*'
-//}
+test {
+	exclude '**/*Manual*'
+}
 
-//artifacts {
-//	archives jar
-//	archives sourcesJar
-//	    archives singleDependentJar
-//}
+// create a single Jar with all dependencies
+// run: gralde singleDependentJar
+task singleDependentJar(type: Jar) {
+	manifest {
+		attributes 'Implementation-Title': 'uptospeed-seeknow',
+		           'Implementation-Version': '1.0'
+	}
+	baseName = project.name
+	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+	with jar
+}
 
-//task distro {
-//	group "Build"
-//	description "build project clean room and update lib/ directory"
-//	mustRunAfter clean
-//	dependsOn build
-//}
+artifacts {
+	//	archives jar
+	//	archives sourcesJar
+	archives singleDependentJar
+}
 
-//distributions {
-//	main {
-//		contents {
-//			into('lib') {
-//				from Jar
-//				from 'lib'
-//				from(project.configurations.runtime)
-//			}
-//			into('bin') {
-//				from 'bin'
-//			}
-//		}
-//	}
-//}
+task distro {
+	group "Build"
+	description "build project clean room and update lib/ directory"
+	mustRunAfter clean
+	dependsOn build
+}
+
+distributions {
+	main {
+		contents {
+			into('lib') {
+				from Jar
+				from 'lib'
+				from(project.configurations.runtime)
+			}
+			//			into('bin') {
+			//				from 'bin'
+			//			}
+		}
+	}
+}
