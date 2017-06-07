@@ -4,6 +4,7 @@
 	"aggressivelyTrimSpace": true,
 	"trimSpacesBefore": [ "_", "-", ",", "." ],
 	"trimSpacesAfter": [ "_", "-" ],
+	"backgroundColors": [ "255x255x255", "186x182x186", "157x153x157" ],
 	"glyphs": [
 		{ "image": "0.png", "character": "0", "similarity": 99 },
 		{ "image": "1.png", "character": "1", "similarity": 99 },
@@ -47,6 +48,7 @@
 		{ "image": "colon.png", "character": ":", "similarity": 99 },
 		{ "image": "comma.png", "character": ",", "similarity": 99 },
 		{ "image": "dash.png", "character": "-", "similarity": 99 },
+		{ "image": "exclamation.png", "character": "!", "similarity": 99 },
 		{ "image": "period.png", "character": ".", "similarity": 99 },
 		{ "image": "space.png", "character": " ", "similarity": 99 },
 		{ "image": "underscore.png", "character": "_", "similarity": 99 }
@@ -63,7 +65,6 @@
 		{ "image": "curly-bracket-open.png", "character": "{", "similarity": 99 },
 		{ "image": "dollar.png", "character": "&", "similarity": 99 },
 		{ "image": "equal.png", "character": "=", "similarity": 99 },
-		{ "image": "exclamation.png", "character": "!", "similarity": 99 },
 		{ "image": "hash.png", "character": "#", "similarity": 99 },
 		{ "image": "parenthesis-close.png", "character": "(", "similarity": 99 },
 		{ "image": "parenthesis-open.png", "character": ")", "similarity": 99 },

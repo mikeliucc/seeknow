@@ -2,10 +2,8 @@ package org.uptospeed.seeknow;
 
 import java.awt.*;
 import java.awt.image.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -34,6 +32,7 @@ public class Seeknow {
 	private boolean aggressivelyTrimSpace;
 	private List<String> trimSpacesBefore;
 	private List<String> trimSpacesAfter;
+	private List<String> backgroundColors;
 
 	public List<Glyph> getGlyphs() { return glyphs;}
 
@@ -56,6 +55,10 @@ public class Seeknow {
 	public List<String> getTrimSpacesAfter() { return trimSpacesAfter; }
 
 	public void setTrimSpacesAfter(List<String> trimSpacesAfter) { this.trimSpacesAfter = trimSpacesAfter; }
+
+	public List<String> getBackgroundColors() { return backgroundColors; }
+
+	public void setBackgroundColors(List<String> backgroundColors) { this.backgroundColors = backgroundColors; }
 
 	public List<String> readMultilines(Rectangle rectangle) {
 		if (rectangle == null) { return null; }
@@ -165,7 +168,7 @@ public class Seeknow {
 		if (height < 0) { throw new IllegalArgumentException("height must be greater or equal to zero"); }
 
 		// we'll accept 40% as another line to scan
-		double lineCount = (double) (height - y) / lineHeight;
+		double lineCount = (double) (height-y) / lineHeight;
 		if (lineCount < 0.8) {
 			if (logger.isInfoEnabled()) { logger.info("Unable to parse since specified height is too short"); }
 			return;
@@ -189,6 +192,8 @@ public class Seeknow {
 		int capturedY = y;
 		int capturedWidth = width - x;
 		int capturedHeight = lineHeight;
+
+		// Set<String> distinctColors = new HashSet<>();
 
 		for (int lineNo = 0; lineNo < numberOfLines; lineNo++) {
 			capturedHeight = (capturedY + lineHeight) > height ? height - capturedY : lineHeight;
@@ -216,10 +221,21 @@ public class Seeknow {
 					int blue = color.getBlue();
 
 					// white
-					if (red == 255 && green == 255 && blue == 255) { continue; }
+					if (red == 255 && green == 255 && blue == 255) {
+						continue;
+					}
+
+					String colorString = red + "x" + green + "x" + blue;
+					if (CollectionUtils.isNotEmpty(backgroundColors) && backgroundColors.contains(colorString)) {
+						// uniformly force all "background" as white to improve matching %
+						lineImage.setRGB(i, j, -1);
+						continue;
+					}
 
 					allwhite = false;
 					oneLine.addColor(color);
+
+					// distinctColors.add(colorString);
 
 					// black
 					if (red == 0 && green == 0 && blue == 0) { continue; }
@@ -256,6 +272,8 @@ public class Seeknow {
 				return;
 			}
 		}
+
+		// System.out.println("distinctColors = " + distinctColors);
 	}
 
 	public List<SeeknowData> fromScreenSelection(int x, int y, int width, int height) {
