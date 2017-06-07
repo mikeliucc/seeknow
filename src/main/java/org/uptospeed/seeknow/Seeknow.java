@@ -1,6 +1,7 @@
 package org.uptospeed.seeknow;
 
 import java.awt.*;
+import java.awt.image.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,12 +15,13 @@ import java.util.concurrent.FutureTask;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.commons.lang3.time.StopWatch;
 import org.sikuli.script.Match;
 import org.sikuli.script.Region;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 public class Seeknow {
 	/** Execution service. */
@@ -28,7 +30,7 @@ public class Seeknow {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private List<Glyph> glyphs;
-	private double lineHeight;
+	private int lineHeight = 16;
 	private boolean aggressivelyTrimSpace;
 	private List<String> trimSpacesBefore;
 	private List<String> trimSpacesAfter;
@@ -39,7 +41,7 @@ public class Seeknow {
 
 	public double getLineHeight() { return lineHeight;}
 
-	public void setLineHeight(double lineHeight) { this.lineHeight = lineHeight;}
+	public void setLineHeight(int lineHeight) { this.lineHeight = lineHeight;}
 
 	public boolean isAggressivelyTrimSpace() { return aggressivelyTrimSpace;}
 
@@ -155,12 +157,121 @@ public class Seeknow {
 		return trim(sb.toString());
 	}
 
+	public void fromScreenSelection(int x, int y, int width, int height, SeeknowProcessor processor) {
+		if (processor == null) { throw new IllegalArgumentException("seeknow process is null"); }
+		if (x < 0) { throw new IllegalArgumentException("x must be greater or equal to zero"); }
+		if (y < 0) { throw new IllegalArgumentException("y must be greater or equal to zero"); }
+		if (width < 0) { throw new IllegalArgumentException("width must be greater or equal to zero"); }
+		if (height < 0) { throw new IllegalArgumentException("height must be greater or equal to zero"); }
+
+		// we'll accept 40% as another line to scan
+		double lineCount = (double) (height - y) / lineHeight;
+		if (lineCount < 0.8) {
+			if (logger.isInfoEnabled()) { logger.info("Unable to parse since specified height is too short"); }
+			return;
+		}
+
+		int numberOfLines = (int) ((lineCount - Math.round(lineCount)) > 0.4 ?
+		                           Math.ceil(lineCount) : Math.floor(lineCount));
+
+		if (logger.isDebugEnabled()) { logger.debug("found (up to) " + numberOfLines + " available for scanning"); }
+
+		Robot robot;
+		try {
+			robot = new Robot();
+			robot.setAutoWaitForIdle(true);
+		} catch (AWTException e) {
+			logger.error("Unable to read text due to failure to capture screen: " + e.getMessage(), e);
+			return;
+		}
+
+		int capturedX = x;
+		int capturedY = y;
+		int capturedWidth = width - x;
+		int capturedHeight = lineHeight;
+
+		for (int lineNo = 0; lineNo < numberOfLines; lineNo++) {
+			capturedHeight = (capturedY + lineHeight) > height ? height - capturedY : lineHeight;
+			capturedY += lineNo == 0 ? 0 : capturedHeight;
+
+			String msgPrefix = "(" + capturedX + "," + capturedY + "," + capturedWidth + "," + capturedHeight + ") ";
+			if (logger.isDebugEnabled()) { logger.debug(msgPrefix + "start capturing"); }
+
+			SeeknowData oneLine = new SeeknowData();
+			oneLine.setLineNumber(lineNo);
+			oneLine.setX(capturedX);
+			oneLine.setY(capturedY);
+			oneLine.setWidth(capturedWidth);
+			oneLine.setHeight(capturedHeight);
+
+			BufferedImage lineImage =
+				robot.createScreenCapture(new Rectangle(capturedX, capturedY, capturedWidth, capturedHeight));
+
+			boolean allwhite = true;
+			for (int i = 0; i < capturedWidth; i++) {
+				for (int j = 0; j < capturedHeight; j++) {
+					Color color = new Color(lineImage.getRGB(i, j));
+					int red = color.getRed();
+					int green = color.getGreen();
+					int blue = color.getBlue();
+
+					// white
+					if (red == 255 && green == 255 && blue == 255) { continue; }
+
+					allwhite = false;
+					oneLine.addColor(color);
+
+					// black
+					if (red == 0 && green == 0 && blue == 0) { continue; }
+
+					// some other color
+					lineImage.setRGB(i, j, 0);
+				}
+			}
+
+			if (allwhite) {
+				if (logger.isDebugEnabled()) { logger.debug(msgPrefix + "found blank line"); }
+				oneLine.setText(null);
+				if (!processor.processMatch(oneLine)) {
+					if (logger.isDebugEnabled()) { logger.debug("stopping now"); }
+					return;
+				}
+			}
+
+			SeeknowFrame lineFrame = SeeknowFrameBuilder.newSeeknowFrame(lineImage, capturedX, capturedY);
+			try { Thread.sleep(500);} catch (InterruptedException e) {}
+
+			Rectangle bounds = lineFrame.getBounds();
+			String text = read(bounds);
+			lineFrame.close();
+			try { Thread.sleep(100);} catch (InterruptedException e) {}
+
+			// String text = read(new Rectangle(capturedX, capturedY, capturedWidth, capturedHeight));
+
+			oneLine.setText(text);
+			if (logger.isDebugEnabled()) { logger.debug(msgPrefix + "captured " + text); }
+
+			if (!processor.processMatch(oneLine)) {
+				if (logger.isDebugEnabled()) { logger.debug("specified processor vetoed to terminate scanning"); }
+				return;
+			}
+		}
+	}
+
+	public List<SeeknowData> fromScreenSelection(int x, int y, int width, int height) {
+		AcceptAllProcessor processor = new AcceptAllProcessor();
+		fromScreenSelection(x, y, width, height, processor);
+		return processor.listMatch();
+	}
+
 	@Override
 	public String toString() {
-		return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+		return new ToStringBuilder(this, MULTI_LINE_STYLE)
 			       .append("glyphs", glyphs)
 			       .append("lineHeight", lineHeight)
 			       .append("aggressivelyTrimSpace", aggressivelyTrimSpace)
+			       .append("trimSpacesBefore", trimSpacesBefore)
+			       .append("trimSpacesAfter", trimSpacesAfter)
 			       .toString();
 	}
 

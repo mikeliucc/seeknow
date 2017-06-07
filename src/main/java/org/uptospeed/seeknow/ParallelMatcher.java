@@ -54,7 +54,7 @@ public class ParallelMatcher implements Callable<List<Match>> {
 			Iterator<Match> all = region.findAll(glyph.getPattern());
 
 			if (IteratorUtils.isEmpty(all)) {
-				if (logger.isDebugEnabled()) { logger.debug(msgPrefix + "NOT MATCHED in specified region"); }
+				if (logger.isTraceEnabled()) { logger.trace(msgPrefix + "NOT MATCHED in specified region"); }
 				return null;
 			}
 
@@ -64,7 +64,7 @@ public class ParallelMatcher implements Callable<List<Match>> {
 				matches.add(m);
 				mapping.put(m, glyph);
 
-				if (logger.isDebugEnabled()) { logger.debug(msgPrefix + "matched at " + m.getCenter()); }
+				if (logger.isTraceEnabled()) { logger.trace(msgPrefix + "matched at " + m.getCenter()); }
 			}
 
 			return matches;

@@ -31,7 +31,7 @@
 		<appender-ref ref="console"/>
 	</logger>
 
-	<logger name="org.uptospeed.seeknow" additivity="false" level="INFO">
+	<logger name="org.uptospeed.seeknow" additivity="false" level="DEBUG">
 		<appender-ref ref="console"/>
 	</logger>
 

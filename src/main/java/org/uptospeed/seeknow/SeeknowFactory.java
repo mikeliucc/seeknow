@@ -10,6 +10,8 @@ import java.util.Map;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -17,7 +19,7 @@ import com.google.gson.GsonBuilder;
 public class SeeknowFactory {
 	/** cache. */
 	private final static Map<String, Seeknow> INSTANCES = new HashMap<>();
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(SeeknowFactory.class);
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting()
 	                                                  .disableHtmlEscaping()
 	                                                  .disableInnerClassSerialization()
