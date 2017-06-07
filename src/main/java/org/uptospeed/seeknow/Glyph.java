@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.sikuli.script.Pattern;
 
 /** Single glyph to be recognized by Seeknow. */
-class Glyph {
+public class Glyph {
 
 	/** Percentage similarity value. */
 	private int similarity = 95;

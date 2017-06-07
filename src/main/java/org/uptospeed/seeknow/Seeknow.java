@@ -2,8 +2,10 @@ package org.uptospeed.seeknow;
 
 import java.awt.*;
 import java.awt.image.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -38,7 +40,7 @@ public class Seeknow {
 
 	public void setGlyphs(List<Glyph> glyphs) { this.glyphs = glyphs;}
 
-	public double getLineHeight() { return lineHeight;}
+	public int getLineHeight() { return lineHeight;}
 
 	public void setLineHeight(int lineHeight) { this.lineHeight = lineHeight;}
 
@@ -59,6 +61,25 @@ public class Seeknow {
 	public List<String> getBackgroundColors() { return backgroundColors; }
 
 	public void setBackgroundColors(List<String> backgroundColors) { this.backgroundColors = backgroundColors; }
+
+	public Seeknow makeClone() {
+		Seeknow clone = new Seeknow();
+		clone.setLineHeight(lineHeight);
+		if (CollectionUtils.isNotEmpty(trimSpacesBefore)) {
+			clone.setTrimSpacesBefore(new ArrayList<>(trimSpacesBefore));
+		}
+		if (CollectionUtils.isNotEmpty(trimSpacesAfter)) {
+			clone.setTrimSpacesAfter(new ArrayList<>(trimSpacesAfter));
+		}
+		if (CollectionUtils.isNotEmpty(backgroundColors)) {
+			clone.setBackgroundColors(new ArrayList<>(backgroundColors));
+		}
+		if (CollectionUtils.isNotEmpty(glyphs)) {
+			clone.setGlyphs(new ArrayList<>(glyphs));
+		}
+
+		return clone;
+	}
 
 	public List<String> readMultilines(Rectangle rectangle) {
 		if (rectangle == null) { return null; }
@@ -168,7 +189,7 @@ public class Seeknow {
 		if (height < 0) { throw new IllegalArgumentException("height must be greater or equal to zero"); }
 
 		// we'll accept 40% as another line to scan
-		double lineCount = (double) (height-y) / lineHeight;
+		double lineCount = (double) (height - y) / lineHeight;
 		if (lineCount < 0.8) {
 			if (logger.isInfoEnabled()) { logger.info("Unable to parse since specified height is too short"); }
 			return;
