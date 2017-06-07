@@ -26,8 +26,9 @@ dependencies {
 	compile("org.apache.commons:commons-collections4:+")
 
 	// support: sikuli
-	//	compile('com.sikulix:sikulixlibswin:+')
+	compile('com.sikulix:sikulixlibswin:+')
 	//	compile('com.sikulix:sikulixlibsmac:+')
+	compile('com.nativelibs4java:bridj:0.7.0')
 
 	// support: gson
 	compile("com.google.code.gson:gson:+")

@@ -1,0 +1,47 @@
+{
+	"glyphFontFace": "Fixedsys",
+	"lineHeight": 15,
+	"aggressivelyTrimSpace": true,
+	"trimSpacesBefore": [ "_", "-", ",", "." ],
+	"trimSpacesAfter": [ "_", "-" ],
+	"backgroundColors": [ "255x255x255", "186x182x186", "157x153x157" ],
+	"glyphs": [
+		{ "image": "0.png", "character": "0", "similarity": 99 },
+		{ "image": "1.png", "character": "1", "similarity": 99 },
+		{ "image": "2.png", "character": "2", "similarity": 99 },
+		{ "image": "3.png", "character": "3", "similarity": 99 },
+		{ "image": "4.png", "character": "4", "similarity": 99 },
+		{ "image": "5.png", "character": "5", "similarity": 99 },
+		{ "image": "6.png", "character": "6", "similarity": 99 },
+		{ "image": "7.png", "character": "7", "similarity": 99 },
+		{ "image": "8.png", "character": "8", "similarity": 99 },
+		{ "image": "9.png", "character": "9", "similarity": 99 }
+	],
+
+	"unused": [
+		{ "image": "ampersand.png", "character": "&", "similarity": 99 },
+		{ "image": "angled-bracket-close.png", "character": ">", "similarity": 99 },
+		{ "image": "angled-bracket-open.png", "character": "<", "similarity": 99 },
+		{ "image": "at.png", "character": "@", "similarity": 99 },
+		{ "image": "backslash.png", "character": "\\", "similarity": 99 },
+		{ "image": "caret.png", "character": "^", "similarity": 99 },
+		{ "image": "curly-bracket-close.png", "character": "}", "similarity": 99 },
+		{ "image": "curly-bracket-open.png", "character": "{", "similarity": 99 },
+		{ "image": "dollar.png", "character": "&", "similarity": 99 },
+		{ "image": "equal.png", "character": "=", "similarity": 99 },
+		{ "image": "hash.png", "character": "#", "similarity": 99 },
+		{ "image": "parenthesis-close.png", "character": "(", "similarity": 99 },
+		{ "image": "parenthesis-open.png", "character": ")", "similarity": 99 },
+		{ "image": "percent.png", "character": "%", "similarity": 99 },
+		{ "image": "pipe.png", "character": "|", "similarity": 99 },
+		{ "image": "plus.png", "character": "+", "similarity": 99 },
+		{ "image": "question.png", "character": "?", "similarity": 99 },
+		{ "image": "semicolon.png", "character": ";", "similarity": 99 },
+		{ "image": "slash.png", "character": "/", "similarity": 99 },
+		{ "image": "square-bracket-close.png", "character": "]", "similarity": 99 },
+		{ "image": "square-bracket-open.png", "character": "[", "similarity": 99 },
+		{ "image": "tick.png", "character": "`", "similarity": 99 },
+		{ "image": "tilde.png", "character": "~", "similarity": 99 }
+	]
+
+}

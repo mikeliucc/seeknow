@@ -398,6 +398,15 @@
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-core/1.2.3/3ebabe69eba0196af9ad3a814f723fb720b9101e/logback-core-1.2.3-sources.jar!/" />
       </SOURCES>
     </library>
+    <library name="Gradle: com.google.android.tools:dx:1.7">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.android.tools/dx/1.7/70eab4a00d9f7ca8849e960a87f5b6736aa4ec11/dx-1.7.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.android.tools/dx/1.7/522cfb6582b6a53a9b8960f68f83242eaab2366e/dx-1.7-sources.jar!/" />
+      </SOURCES>
+    </library>
     <library name="Gradle: com.google.code.gson:gson:2.8.1">
       <CLASSES>
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.8.1/2a8e0aa38a2e21cb39e2f5a7d6704cbdc941da0/gson-2.8.1.jar!/" />
@@ -406,6 +415,22 @@
       <SOURCES>
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.8.1/c10732c97eccba635e20596a02c3824fef0605bf/gson-2.8.1-sources.jar!/" />
       </SOURCES>
+    </library>
+    <library name="Gradle: com.nativelibs4java:bridj:0.7.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.nativelibs4java/bridj/0.7.0/461c40ed578c92106579e370838ed4e224d0289e/bridj-0.7.0.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.nativelibs4java/bridj/0.7.0/a766ea858f114581e67a42516138ad4324a3ef23/bridj-0.7.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Gradle: com.sikulix:sikulixlibswin:1.1.999">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.sikulix/sikulixlibswin/1.1.999/e9867dc9266d06208ee7c39b90fc1dee7c4c998a/sikulixlibswin-1.1.999.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
     </library>
     <library name="Gradle: commons-io:commons-io:2.5">
       <CLASSES>
