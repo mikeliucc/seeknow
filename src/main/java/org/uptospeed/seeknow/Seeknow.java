@@ -130,7 +130,7 @@ public class Seeknow {
 		List<FutureTask<List<Match>>> futures = new ArrayList<>();
 		CountDownLatch latch = new CountDownLatch(glyphs.size());
 
-		if (logger.isDebugEnabled()) { logger.debug(ticktock.getTime() + ":\tsetting parallel matching");}
+		// if (logger.isDebugEnabled()) { logger.debug("(seeknow) start parallel matching");}
 
 		for (Glyph g : glyphs) {
 			ParallelMatcher matcher = new ParallelMatcher(g, region, mapping, latch);
@@ -139,16 +139,16 @@ public class Seeknow {
 			executor.execute(future);
 		}
 
-		if (logger.isDebugEnabled()) { logger.debug(ticktock.getTime() + ":\twaiting for matching to complete"); }
+		// if (logger.isDebugEnabled()) { logger.debug("(seeknow) waiting for matching to complete"); }
 
 		try {
 			latch.await();
-			if (logger.isDebugEnabled()) { logger.debug(ticktock.getTime() + ":\tparallel matching completed"); }
+			if (logger.isDebugEnabled()) { logger.debug("(seeknow) match completed in " + ticktock.getTime() + "ms"); }
 		} catch (InterruptedException e) {
-			logger.error("Error occurred while waiting for paralle matching threads to complete: " + e.getMessage(), e);
+			logger.error("(seeknow) Error while waiting for matching threads to complete: " + e.getMessage(), e);
 		}
 
-		if (logger.isDebugEnabled()) { logger.debug(ticktock.getTime() + "\t: collect matches"); }
+		// if (logger.isDebugEnabled()) { logger.debug("(seeknow) collect matches"); }
 
 		List<Match> matches = new ArrayList<>();
 		for (FutureTask<List<Match>> future : futures) {
@@ -156,7 +156,7 @@ public class Seeknow {
 				List<Match> matched = future.get();
 				if (CollectionUtils.isNotEmpty(matched)) { matches.addAll(matched);}
 			} catch (InterruptedException | ExecutionException e) {
-				logger.error("Error while collecting matched result: " + e.getMessage(), e);
+				logger.error("(seeknow) Error while collecting matched result: " + e.getMessage(), e);
 			}
 		}
 
@@ -168,13 +168,15 @@ public class Seeknow {
 
 			Glyph glyph = mapping.get(m);
 			if (glyph == null) {
-				logger.error("Null glyph found at " + m);
+				logger.error("(seeknow) null/invalid glyph found at " + m);
 			} else {
 				sb.append(glyph.getCharacter());
 			}
 		}
 
-		if (logger.isDebugEnabled()) { logger.debug(ticktock.getTime() + "\t: done, found " + sb.toString()); }
+		if (logger.isDebugEnabled()) {
+			logger.debug("(seeknow) done in " + ticktock.getTime() + "ms, found '" + sb.toString() + "'");
+		}
 
 		ticktock.stop();
 
@@ -191,21 +193,21 @@ public class Seeknow {
 		// we'll accept 40% as another line to scan
 		double lineCount = (double) (height - y) / lineHeight;
 		if (lineCount < 0.8) {
-			if (logger.isInfoEnabled()) { logger.info("Unable to parse since specified height is too short"); }
+			if (logger.isInfoEnabled()) { logger.info("(seeknow) Unable to parse; specified height is too short"); }
 			return;
 		}
 
 		int numberOfLines = (int) ((lineCount - Math.round(lineCount)) > 0.4 ?
 		                           Math.ceil(lineCount) : Math.floor(lineCount));
 
-		if (logger.isDebugEnabled()) { logger.debug("found (up to) " + numberOfLines + " available for scanning"); }
+		if (logger.isDebugEnabled()) { logger.debug("(seeknow) found (up to) " + numberOfLines + " lines to scan"); }
 
 		Robot robot;
 		try {
 			robot = new Robot();
 			robot.setAutoWaitForIdle(true);
 		} catch (AWTException e) {
-			logger.error("Unable to read text due to failure to capture screen: " + e.getMessage(), e);
+			logger.error("(seeknow) Unable to read text due to failure to capture screen: " + e.getMessage(), e);
 			return;
 		}
 
@@ -220,8 +222,8 @@ public class Seeknow {
 			capturedHeight = (capturedY + lineHeight) > height ? height - capturedY : lineHeight;
 			capturedY += lineNo == 0 ? 0 : capturedHeight;
 
-			String msgPrefix = "(" + capturedX + "," + capturedY + "," + capturedWidth + "," + capturedHeight + ") ";
-			if (logger.isDebugEnabled()) { logger.debug(msgPrefix + "start capturing"); }
+			String position = " at (" + capturedX + "," + capturedY + "," + capturedWidth + "," + capturedHeight + ") ";
+			if (logger.isDebugEnabled()) { logger.debug("(seeknow) start capturing" + position); }
 
 			SeeknowData oneLine = new SeeknowData();
 			oneLine.setLineNumber(lineNo);
@@ -267,7 +269,7 @@ public class Seeknow {
 			}
 
 			if (allwhite) {
-				if (logger.isDebugEnabled()) { logger.debug(msgPrefix + "found blank line"); }
+				if (logger.isDebugEnabled()) { logger.debug("(seeknow) found blank line" + position); }
 				oneLine.setText(null);
 				if (!processor.processMatch(oneLine)) {
 					if (logger.isDebugEnabled()) { logger.debug("stopping now"); }
@@ -286,10 +288,9 @@ public class Seeknow {
 			// String text = read(new Rectangle(capturedX, capturedY, capturedWidth, capturedHeight));
 
 			oneLine.setText(text);
-			if (logger.isDebugEnabled()) { logger.debug(msgPrefix + "captured " + text); }
 
 			if (!processor.processMatch(oneLine)) {
-				if (logger.isDebugEnabled()) { logger.debug("specified processor vetoed to terminate scanning"); }
+				if (logger.isDebugEnabled()) { logger.debug("(seeknow) processor vetoed to terminate scanning"); }
 				return;
 			}
 		}

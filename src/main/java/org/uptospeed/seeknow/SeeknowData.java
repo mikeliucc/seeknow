@@ -2,13 +2,15 @@ package org.uptospeed.seeknow;
 
 import java.awt.*;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+
+import static org.apache.commons.lang3.builder.ToStringStyle.NO_CLASS_NAME_STYLE;
 
 public class SeeknowData implements Serializable {
 	private String text;
@@ -51,10 +53,10 @@ public class SeeknowData implements Serializable {
 
 	@Override
 	public String toString() {
-		return new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE)
+		return new ToStringBuilder(this, NO_CLASS_NAME_STYLE)
 			       .append("lineNumber", lineNumber)
 			       .append("text", text)
-			       .append("colors", colors)
+			       .append("colors(rgb)", toString(colors))
 			       .append("dimension", "(" + x + "," + y + "," + width + "," + height + ")")
 			       .toString();
 	}
@@ -66,7 +68,6 @@ public class SeeknowData implements Serializable {
 		if (o == null || getClass() != o.getClass()) { return false; }
 
 		SeeknowData that = (SeeknowData) o;
-
 		return new EqualsBuilder()
 			       .append(x, that.x)
 			       .append(y, that.y)
@@ -83,5 +84,15 @@ public class SeeknowData implements Serializable {
 			       .append(width)
 			       .append(height)
 			       .toHashCode();
+	}
+
+	protected String toString(Collection<Color> colors) {
+		StringBuilder buffer = new StringBuilder("[");
+		colors.forEach(c -> buffer.append("(")
+		                          .append(c.getRed()).append(",")
+		                          .append(c.getGreen()).append(",")
+		                          .append(c.getBlue()).append(")"));
+		buffer.append("]");
+		return buffer.toString();
 	}
 }
