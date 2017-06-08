@@ -15,6 +15,7 @@ import org.junit.Test;
 
 public class Seeknow2Test {
 	private static final int SLEEP_BETWEEN_TESTS = 2500;
+	private static final int Y_OFFSET = 21;
 	private static Seeknow seeknow = null;
 
 	@BeforeClass
@@ -40,7 +41,7 @@ public class Seeknow2Test {
 		                                    .setPath("/images/seeknow2-test2.png")
 		                                    .setAsResource(true)
 		                                    .setX(0)
-		                                    .setY(21)
+		                                    .setY(Y_OFFSET)
 		                                    .setConvertBW(true)
 		                                    .build();
 		if (SLEEP_BETWEEN_TESTS > 0) { try { Thread.sleep(SLEEP_BETWEEN_TESTS);} catch (InterruptedException e) { } }
@@ -157,9 +158,9 @@ public class Seeknow2Test {
 		Thread.sleep(3000);
 
 		int x = 10;
-		int y = 46;
-		int width = f.getWidth();
-		int height = f.getHeight();
+		int y = 45;
+		int width = f.getWidth() - x;
+		int height = f.getHeight() - y + Y_OFFSET;
 
 		System.out.println("seeknow over (" + x + "," + y + "," + width + "," + height + ")");
 		AcceptAllProcessor processor = new AcceptAllProcessor();
@@ -188,8 +189,8 @@ public class Seeknow2Test {
 
 		int x = 10;
 		int y = 46;
-		int width = f.getWidth();
-		int height = f.getHeight();
+		int width = f.getWidth() - x;
+		int height = f.getHeight() - y + Y_OFFSET;
 
 		System.out.println("seeknow over (" + x + "," + y + "," + width + "," + height + ")");
 		FirstContainsProcessor processor = new FirstContainsProcessor("NY-PP-00146694");
@@ -202,14 +203,14 @@ public class Seeknow2Test {
 	}
 
 	@Test
-	public void fromScreenSelection3() throws Throwable {
+	public void fromScreenSelection_test_red_text() throws Throwable {
 		SeeknowFrame f = newSeeknowFrame("/images/seeknow2-test1 original.png");
 		Thread.sleep(3000);
 
 		int x = 10;
 		int y = 46;
-		int width = f.getWidth();
-		int height = f.getHeight();
+		int width = f.getWidth() - x;
+		int height = f.getHeight() - y + Y_OFFSET;
 
 		System.out.println("seeknow over (" + x + "," + y + "," + width + "," + height + ")");
 		SeeknowProcessor firstRedProcessor = new SeeknowProcessor() {
@@ -263,7 +264,7 @@ public class Seeknow2Test {
 		                                        .setPath(resource)
 		                                        .setAsResource(true)
 		                                        .setX(0)
-		                                        .setY(21)
+		                                        .setY(Y_OFFSET)
 		                                        .build();
 		if (SLEEP_BETWEEN_TESTS > 0) { try { Thread.sleep(SLEEP_BETWEEN_TESTS);} catch (InterruptedException e) { } }
 		return frame;

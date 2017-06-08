@@ -191,7 +191,8 @@ public class Seeknow {
 		if (height < 0) { throw new IllegalArgumentException("height must be greater or equal to zero"); }
 
 		// we'll accept 40% as another line to scan
-		double lineCount = (double) (height - y) / lineHeight;
+		double lineCount = (double) height / lineHeight;
+		// double lineCount = (double) (height - y) / lineHeight;
 		if (lineCount < 0.8) {
 			if (logger.isInfoEnabled()) { logger.info("(seeknow) Unable to parse; specified height is too short"); }
 			return;
@@ -213,13 +214,13 @@ public class Seeknow {
 
 		int capturedX = x;
 		int capturedY = y;
-		int capturedWidth = width - x;
+		int capturedWidth = width;
 		int capturedHeight = lineHeight;
 
 		// Set<String> distinctColors = new HashSet<>();
 
 		for (int lineNo = 0; lineNo < numberOfLines; lineNo++) {
-			capturedHeight = (capturedY + lineHeight) > height ? height - capturedY : lineHeight;
+			capturedHeight = (capturedY - y + lineHeight) > height ? height - capturedY : lineHeight;
 			capturedY += lineNo == 0 ? 0 : capturedHeight;
 
 			String position = " at (" + capturedX + "," + capturedY + "," + capturedWidth + "," + capturedHeight + ") ";
@@ -244,9 +245,7 @@ public class Seeknow {
 					int blue = color.getBlue();
 
 					// white
-					if (red == 255 && green == 255 && blue == 255) {
-						continue;
-					}
+					if (red == 255 && green == 255 && blue == 255) { continue; }
 
 					String colorString = red + "x" + green + "x" + blue;
 					if (CollectionUtils.isNotEmpty(backgroundColors) && backgroundColors.contains(colorString)) {
@@ -323,7 +322,7 @@ public class Seeknow {
 		}
 
 		if (CollectionUtils.isNotEmpty(trimSpacesAfter)) {
-			for (String ch : trimSpacesAfter) { oneLine = StringUtils.replaceAll(oneLine, "(\\" + ch + ")\\s", "$1"); }
+			for (String ch : trimSpacesAfter) { oneLine = StringUtils.replaceAll(oneLine, "(\\" + ch + ")\\s+", "$1"); }
 		}
 
 		if (aggressivelyTrimSpace) {
