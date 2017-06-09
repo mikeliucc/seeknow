@@ -90,7 +90,7 @@ public class Seeknow3Test {
 		});
 
 		found.forEach(System.out::println);
-		Assert.assertEquals(27, found.size());
+		Assert.assertEquals(28, found.size());
 		Assert.assertEquals("!NUL PROCESS! Site: CAA 100 FINISHED 000000", found.get(0));
 		Assert.assertEquals("pdps806 Site: CAA 300 FINISHED 000001", found.get(1));
 		Assert.assertEquals("pdps811 Site: CAA 400 FINISHED 000001", found.get(2));
