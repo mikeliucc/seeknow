@@ -9,6 +9,7 @@ import org.junit.Test;
 public class SeeknowTest {
 
 	private static final int SLEEP_BETWEEN_TESTS = 100;
+	private static final int Y_OFFSET = 20;
 	private static Seeknow seeknow = null;
 
 	@BeforeClass
@@ -77,7 +78,7 @@ public class SeeknowTest {
 		                                        .setPath(resource)
 		                                        .setAsResource(true)
 		                                        .setX(0)
-		                                        .setY(20)
+		                                        .setY(Y_OFFSET)
 		                                        .build();
 		if (SLEEP_BETWEEN_TESTS > 0) { try { Thread.sleep(SLEEP_BETWEEN_TESTS);} catch (InterruptedException e) { } }
 		return frame;

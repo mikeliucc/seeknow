@@ -104,7 +104,7 @@ public class Seeknow2Test {
 
 		List<String> lines = new ArrayList<>();
 		for (int lineNo = 0; lineNo < numberOfLines; lineNo++) {
-			int y = 45 + (lineNo * lineHeight);
+			int y = 46 + (lineNo * lineHeight);
 			int width = f.getWidth() - x;
 			if ((y + height) > capturedHeight) { height = capturedHeight - y + lineHeight; }
 			System.out.println("x=" + x + ", y=" + y + ", width=" + width + ", height=" + height);
@@ -165,6 +165,7 @@ public class Seeknow2Test {
 		System.out.println("seeknow over (" + x + "," + y + "," + width + "," + height + ")");
 		AcceptAllProcessor processor = new AcceptAllProcessor();
 		seeknow.fromScreenSelection(x, y, width, height, processor);
+		f.close();
 		List<SeeknowData> seeknowData = processor.listMatch();
 
 		List<String> found = new ArrayList<>();
@@ -195,6 +196,7 @@ public class Seeknow2Test {
 		System.out.println("seeknow over (" + x + "," + y + "," + width + "," + height + ")");
 		FirstContainsProcessor processor = new FirstContainsProcessor("NY-PP-00146694");
 		seeknow.fromScreenSelection(x, y, width, height, processor);
+		f.close();
 		List<SeeknowData> seeknowData = processor.listMatch();
 
 		Assert.assertEquals(1, CollectionUtils.size(seeknowData));
@@ -237,6 +239,7 @@ public class Seeknow2Test {
 		};
 
 		seeknow.fromScreenSelection(x, y, width, height, firstRedProcessor);
+		f.close();
 		List<SeeknowData> seeknowData = firstRedProcessor.listMatch();
 
 		Assert.assertEquals(1, CollectionUtils.size(seeknowData));
