@@ -2,6 +2,7 @@ package org.uptospeed.seeknow;
 
 import java.awt.*;
 import java.awt.image.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,8 +13,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 
+import javax.imageio.ImageIO;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.time.StopWatch;
 import org.sikuli.script.Match;
@@ -21,6 +25,7 @@ import org.sikuli.script.Region;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static java.awt.image.BufferedImage.TYPE_INT_RGB;
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 public class Seeknow {
@@ -30,7 +35,7 @@ public class Seeknow {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private List<Glyph> glyphs;
-	private int lineHeight = 16;
+	private int lineHeight = 15;
 	private boolean aggressivelyTrimSpace;
 	private List<String> trimSpacesBefore;
 	private List<String> trimSpacesAfter;
@@ -282,6 +287,8 @@ public class Seeknow {
 			SeeknowFrame lineFrame = SeeknowFrameBuilder.newSeeknowFrame(lineImage, capturedX, capturedY);
 			try { Thread.sleep(500);} catch (InterruptedException e) {}
 
+			// saveFrame(lineFrame, capturedX, capturedY, capturedWidth, capturedHeight);
+
 			Rectangle bounds = lineFrame.getBounds();
 			String text = read(bounds);
 			lineFrame.close();
@@ -298,6 +305,20 @@ public class Seeknow {
 		}
 
 		// System.out.println("distinctColors = " + distinctColors);
+	}
+
+	private void saveFrame(SeeknowFrame lineFrame, int x, int y, int width, int height) {
+		String filename = SystemUtils.getJavaIoTmpDir() + "/seeknow/" +
+		                  x + "-" + y + "-" + width + "-" + height + ".png";
+
+		try {
+			BufferedImage image = new BufferedImage(lineFrame.getWidth(), lineFrame.getHeight(), TYPE_INT_RGB);
+			Graphics2D graphics2D = image.createGraphics();
+			lineFrame.paint(graphics2D);
+			ImageIO.write(image, "png", new File(filename));
+		} catch (Exception exception) {
+			exception.printStackTrace();
+		}
 	}
 
 	public List<SeeknowData> fromScreenSelection(int x, int y, int width, int height) {

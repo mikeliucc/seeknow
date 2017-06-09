@@ -1,6 +1,6 @@
 {
 	"glyphFontFace": "Fixedsys",
-	"lineHeight": 16,
+	"lineHeight": 15,
 	"aggressivelyTrimSpace": true,
 	"trimSpacesBefore": [ "_", "-", ",", "." ],
 	"trimSpacesAfter": [ "_", "-" ],
