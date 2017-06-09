@@ -51,11 +51,28 @@ test {
 // run: gralde singleDependentJar
 task singleDependentJar(type: Jar) {
 	manifest {
-		attributes 'Implementation-Title': 'uptospeed-seeknow',
+		attributes 'Implementation-Title': 'org.uptospeed.seeknow',
 		           'Implementation-Version': '1.0'
 	}
 	baseName = project.name
-	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+	from {
+		configurations.compile.collect { it.isDirectory() ? it  : zipTree(it) }
+	}{
+		exclude "ImagesAPI.sikuli/"
+		exclude "JavaScript/"
+		exclude "Lib/"
+		exclude "META-INF/maven/"
+		exclude "META-INF/services/"
+		exclude "META-INF/*.txt"
+		exclude "Support/"
+		exclude "com/android/"
+		exclude "junit/"
+		exclude "org/apache/"
+		exclude "org/slf4j/"
+		exclude "ch/"
+		exclude "Settings/"
+		exclude "./logback.xml"
+	}
 	with jar
 }
 
