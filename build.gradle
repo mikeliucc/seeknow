@@ -70,7 +70,6 @@ task singleDependentJar(type: Jar) {
 		exclude "org/apache/"
 		exclude "org/slf4j/"
 		exclude "ch/"
-		exclude "Settings/"
 		exclude "./logback.xml"
 	}
 	with jar

@@ -90,6 +90,7 @@ public class Seeknow3Test {
 		});
 
 		found.forEach(System.out::println);
+
 		Assert.assertEquals(28, found.size());
 		Assert.assertEquals("!NUL PROCESS! Site: CAA 100 FINISHED 000000", found.get(0));
 		Assert.assertEquals("pdps806 Site: CAA 300 FINISHED 000001", found.get(1));
@@ -112,12 +113,13 @@ public class Seeknow3Test {
 		Assert.assertEquals("exec805 Site: CAA 1525 FINISHED 000001", found.get(18));
 		Assert.assertEquals("!NUL PROCESS! Site: CAA 1600 FINISHED 000000", found.get(19));
 		Assert.assertEquals("!NUL PROCESS! Site: CAA 1615 FINISHED 000000", found.get(20));
-		Assert.assertEquals("ddpost.shn Site: CAA 1625 FINISHED 000001", found.get(21));
+		Assert.assertEquals("ddpost.sh Site: CAA 1625 FINISHED 000001", found.get(21));
 		Assert.assertEquals("!NUL PROCESS! Site: 1630 FINISHED 000000", found.get(22));
 		Assert.assertEquals("!NUL PROCESS! Site: CAA 1650 FINISHED 000000", found.get(23));
 		Assert.assertEquals("!NUL PROCESS! Site: CAA 1675 FINISHED 000000", found.get(24));
 		Assert.assertEquals("!NUL PROCESS! Site: 1800 FINISHED 000000", found.get(25));
 		Assert.assertEquals("!NUL PROCESS! Site: 1900 FINISHED 000000", found.get(26));
+		Assert.assertEquals("!NUL_PROCESS! Site: 2000 FINISHED 000000", found.get(27));
 
 	}
 

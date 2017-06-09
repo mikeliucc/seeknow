@@ -160,6 +160,7 @@ public class Seeknow {
 			}
 		}
 
+		removeDups(matches, mapping);
 		matches.sort(new MatchesComparator());
 
 		StringBuilder sb = new StringBuilder();
@@ -174,13 +175,15 @@ public class Seeknow {
 			}
 		}
 
+		String text = trim(sb.toString());
+
 		if (logger.isDebugEnabled()) {
-			logger.debug("(seeknow) done in " + ticktock.getTime() + "ms, found '" + sb.toString() + "'");
+			logger.debug("(seeknow) done in " + ticktock.getTime() + "ms, found '" + text + "'");
 		}
 
 		ticktock.stop();
 
-		return trim(sb.toString());
+		return text;
 	}
 
 	public void fromScreenSelection(int x, int y, int width, int height, SeeknowProcessor processor) {
@@ -271,7 +274,7 @@ public class Seeknow {
 				if (logger.isDebugEnabled()) { logger.debug("(seeknow) found blank line" + position); }
 				oneLine.setText(null);
 				if (!processor.processMatch(oneLine)) {
-					if (logger.isDebugEnabled()) { logger.debug("stopping now"); }
+					if (logger.isDebugEnabled()) { logger.debug("(seeknow) stopping now"); }
 					return;
 				}
 			}
@@ -314,6 +317,69 @@ public class Seeknow {
 			       .toString();
 	}
 
+	protected void removeDups(List<Match> matches, Map<Match, Glyph> mapping) {
+		if (CollectionUtils.isEmpty(matches)) { return; }
+
+		Map<Integer, Match> matchMap = new HashMap<>();
+		for (int i = 0; i < matches.size(); i++) {
+			Match match = matches.get(i);
+			int x = match.getX();
+			if (matchMap.containsKey(x)) {
+				Match oldMatch = matchMap.get(x);
+				Glyph oldGlyph = mapping.get(oldMatch);
+				String oldChar = oldGlyph.getCharacter();
+
+				Glyph newGlyph = mapping.get(match);
+				String newChar = newGlyph.getCharacter();
+
+				if (StringUtils.equals(oldChar, "h") && StringUtils.equals(newChar, "n")) {
+					// HACK: keep h, drop n
+					if (logger.isInfoEnabled()) {
+						logger.info("(seeknow) 'h' and 'n' in same x-position " + x + ", removing 'n'");
+					}
+					mapping.remove(match);
+					matches.remove(match);
+					continue;
+				}
+
+				if (StringUtils.equals(oldChar, "n") && StringUtils.equals(newChar, "h")) {
+					// HACK: keep h, drop n
+					if (logger.isInfoEnabled()) {
+						logger.info("(seeknow) 'h' and 'n' in same x-position " + x + ", removing 'n'");
+					}
+					mapping.remove(oldMatch);
+					matches.remove(oldMatch);
+					continue;
+				}
+
+				if (StringUtils.equals(oldChar, " ") && StringUtils.equals(newChar, " ")) {
+					if (logger.isInfoEnabled()) {
+						logger.info("(seeknow) 2 ' ' characters in same x-position " + x + ", removing one of them");
+					}
+					mapping.remove(match);
+					matches.remove(match);
+					continue;
+				}
+
+				if (StringUtils.equals(oldChar, " ") && StringUtils.equals(newChar, "_")) {
+					// HACK: keep ' ', drop '_'
+					if (logger.isInfoEnabled()) {
+						logger.info("(seeknow) ' ' and '_' in same x-position " + x + ", removing '_'");
+					}
+					mapping.remove(match);
+					matches.remove(match);
+					continue;
+				}
+
+				if (logger.isInfoEnabled()) {
+					logger.info("(seeknow) multiple matches at " + match.getCenter() + ": " + oldChar + "," + newChar);
+				}
+			} else {
+				matchMap.put(x, match);
+			}
+		}
+	}
+
 	protected String trim(String oneLine) {
 		if (StringUtils.isEmpty(oneLine)) { return oneLine; }
 
@@ -327,6 +393,9 @@ public class Seeknow {
 
 		if (aggressivelyTrimSpace) {
 			oneLine = StringUtils.trim(oneLine);
+			while (StringUtils.contains(oneLine, "  ")) { oneLine = StringUtils.replace(oneLine, "  ", " "); }
+			// multiple consecutive underscores probably means that the text is at the bottom of a "Box" with border
+			oneLine = StringUtils.replaceAll(oneLine, "(_{4,})", " ");
 			while (StringUtils.contains(oneLine, "  ")) { oneLine = StringUtils.replace(oneLine, "  ", " "); }
 		}
 
