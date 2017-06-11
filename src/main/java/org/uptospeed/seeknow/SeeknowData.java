@@ -2,15 +2,9 @@ package org.uptospeed.seeknow;
 
 import java.awt.*;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
-import static org.apache.commons.lang3.builder.ToStringStyle.NO_CLASS_NAME_STYLE;
 
 public class SeeknowData implements Serializable {
 	private String text;
@@ -19,7 +13,7 @@ public class SeeknowData implements Serializable {
 	private int y;
 	private int width;
 	private int height;
-	private Set<Color> colors = new HashSet<>();
+	private SeeknowColorSet colors = new SeeknowColorSet();
 
 	public String getText() { return text;}
 
@@ -45,21 +39,13 @@ public class SeeknowData implements Serializable {
 
 	public void setHeight(int height) { this.height = height;}
 
-	public Set<Color> getColors() { return colors;}
+	public SeeknowColorSet getColors() { return colors;}
 
-	public void setColors(Set<Color> colors) { this.colors = colors;}
+	public void setColors(SeeknowColorSet colors) { this.colors = colors;}
 
-	public void addColor(Color color) { this.colors.add(color); }
+	public void addColor(Color color) { this.colors.add(new SeeknowColor(color)); }
 
-	@Override
-	public String toString() {
-		return new ToStringBuilder(this, NO_CLASS_NAME_STYLE)
-			       .append("lineNumber", lineNumber)
-			       .append("text", text)
-			       .append("colors(rgb)", toString(colors))
-			       .append("dimension", "(" + x + "," + y + "," + width + "," + height + ")")
-			       .toString();
-	}
+	public void addColor(SeeknowColor color) { this.colors.add(color); }
 
 	@Override
 	public boolean equals(Object o) {
@@ -78,21 +64,17 @@ public class SeeknowData implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(17, 37)
-			       .append(x)
-			       .append(y)
-			       .append(width)
-			       .append(height)
-			       .toHashCode();
+		return new HashCodeBuilder(17, 37).append(x).append(y).append(width).append(height).toHashCode();
 	}
 
-	protected String toString(Collection<Color> colors) {
-		StringBuilder buffer = new StringBuilder("[");
-		colors.forEach(c -> buffer.append("(")
-		                          .append(c.getRed()).append(",")
-		                          .append(c.getGreen()).append(",")
-		                          .append(c.getBlue()).append(")"));
-		buffer.append("]");
-		return buffer.toString();
+	@Override
+	public String toString() {
+		return "lineNumber=" + lineNumber + "\n" +
+		       "text=" + text + "\n" +
+		       "colors=" + colors + "\n" +
+		       "x=" + x + "\n" +
+		       "y=" + y + "\n" +
+		       "width=" + width + "\n" +
+		       "height=" + height + "\n";
 	}
 }

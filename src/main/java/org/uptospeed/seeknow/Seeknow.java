@@ -25,7 +25,7 @@ import org.sikuli.script.Region;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static java.awt.image.BufferedImage.TYPE_INT_RGB;
+import static java.awt.image.BufferedImage.*;
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 public class Seeknow {
@@ -307,20 +307,6 @@ public class Seeknow {
 		// System.out.println("distinctColors = " + distinctColors);
 	}
 
-	private void saveFrame(SeeknowFrame lineFrame, int x, int y, int width, int height) {
-		String filename = SystemUtils.getJavaIoTmpDir() + "/seeknow/" +
-		                  x + "-" + y + "-" + width + "-" + height + ".png";
-
-		try {
-			BufferedImage image = new BufferedImage(lineFrame.getWidth(), lineFrame.getHeight(), TYPE_INT_RGB);
-			Graphics2D graphics2D = image.createGraphics();
-			lineFrame.paint(graphics2D);
-			ImageIO.write(image, "png", new File(filename));
-		} catch (Exception exception) {
-			exception.printStackTrace();
-		}
-	}
-
 	public List<SeeknowData> fromScreenSelection(int x, int y, int width, int height) {
 		AcceptAllProcessor processor = new AcceptAllProcessor();
 		fromScreenSelection(x, y, width, height, processor);
@@ -336,6 +322,20 @@ public class Seeknow {
 			       .append("trimSpacesBefore", trimSpacesBefore)
 			       .append("trimSpacesAfter", trimSpacesAfter)
 			       .toString();
+	}
+
+	protected void saveFrame(SeeknowFrame lineFrame, int x, int y, int width, int height) {
+		String filename = SystemUtils.getJavaIoTmpDir() + "/seeknow/" +
+		                  x + "-" + y + "-" + width + "-" + height + ".png";
+
+		try {
+			BufferedImage image = new BufferedImage(lineFrame.getWidth(), lineFrame.getHeight(), TYPE_INT_RGB);
+			Graphics2D graphics2D = image.createGraphics();
+			lineFrame.paint(graphics2D);
+			ImageIO.write(image, "png", new File(filename));
+		} catch (Exception exception) {
+			exception.printStackTrace();
+		}
 	}
 
 	protected void removeDups(List<Match> matches, Map<Match, Glyph> mapping) {
