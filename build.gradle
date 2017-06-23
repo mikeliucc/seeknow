@@ -42,13 +42,12 @@ dependencies {
 	testCompile("junit:junit:4.12")
 }
 
-
 test {
 	exclude '**/*Manual*'
 }
 
 // create a single Jar with all dependencies
-// run: gralde singleDependentJar
+// run: gradle singleDependentJar
 task singleDependentJar(type: Jar) {
 	manifest {
 		attributes 'Implementation-Title': 'org.uptospeed.seeknow',
@@ -56,8 +55,8 @@ task singleDependentJar(type: Jar) {
 	}
 	baseName = project.name
 	from {
-		configurations.compile.collect { it.isDirectory() ? it  : zipTree(it) }
-	}{
+		configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+	} {
 		exclude "ImagesAPI.sikuli/"
 		exclude "JavaScript/"
 		exclude "Lib/"
@@ -66,6 +65,7 @@ task singleDependentJar(type: Jar) {
 		exclude "META-INF/*.txt"
 		exclude "Support/"
 		exclude "com/android/"
+		exclude "com/google/gson/"
 		exclude "junit/"
 		exclude "org/apache/"
 		exclude "org/slf4j/"
@@ -97,9 +97,6 @@ distributions {
 				from 'lib'
 				from(project.configurations.runtime)
 			}
-			//			into('bin') {
-			//				from 'bin'
-			//			}
 		}
 	}
 }
