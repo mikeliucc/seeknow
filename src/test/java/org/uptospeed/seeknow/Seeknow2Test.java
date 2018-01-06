@@ -224,7 +224,7 @@ public class Seeknow2Test {
 				if (CollectionUtils.isEmpty(match.getColors())) { return true; }
 
 				String redColor = Color.RED.toString();
-				for (Color color : match.getColors()) {
+				for (SeeknowColor color : match.getColors()) {
 					if (StringUtils.equals(color.toString(), redColor)) {
 						data.add(match);
 						return false;
